@@ -60,8 +60,10 @@ class Board extends Component {
         this.setState({board: result});
     }
 
-    generateAiTurn(treeDepth) {
-
+    generateFoxTurn(boardPieceManagerList = [this.boardPieceManager]) {
+        console.log(boardPieceManagerList);
+        console.log(boardPieceManagerList[0] instanceof BoardPieceManager);
+        console.log(Array.isArray(boardPieceManagerList));
     }
 
     checkWinConditions() {
@@ -69,7 +71,10 @@ class Board extends Component {
         let possibleMoves = this.boardPieceManager.getFox().getPossibleMoves(boardSize);
         let validMoves = 0;
 
-        console.log("Current score: ", this.boardPieceManager.evaluateScore());
+        let currentScore = this.boardPieceManager.evaluateScore();
+        console.log("Current score: ", currentScore);
+
+        this.generateFoxTurn();
 
         for (let index in possibleMoves) {
             if (!this.boardPieceManager.getPieceForCoordinate(possibleMoves[index])) {
