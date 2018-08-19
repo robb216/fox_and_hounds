@@ -60,10 +60,16 @@ class Board extends Component {
         this.setState({board: result});
     }
 
+    generateAiTurn(treeDepth) {
+
+    }
+
     checkWinConditions() {
         let { boardSize } = this.props;
         let possibleMoves = this.boardPieceManager.getFox().getPossibleMoves(boardSize);
         let validMoves = 0;
+
+        console.log("Current score: ", this.boardPieceManager.evaluateScore());
 
         for (let index in possibleMoves) {
             if (!this.boardPieceManager.getPieceForCoordinate(possibleMoves[index])) {

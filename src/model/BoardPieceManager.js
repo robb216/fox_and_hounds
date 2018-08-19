@@ -14,6 +14,42 @@ class BoardPieceManager {
 
     }
 
+    evaluateScore() {
+        let evaluation = 0;
+
+        // Check the distance between fox and the highest dog(s)
+        // If the fox's Y has already passed the hounds, fox win
+        let minHoundsY = this.boardSize - 1;
+        for (let index in this.hounds) {
+            const houndY = this.hounds[index].coordinate.y;
+            if (houndY < minHoundsY) {
+                minHoundsY = houndY;
+            }
+        }
+        if (this.fox.y <= minHoundsY) {
+            evaluation = 400;
+            return evaluation;
+        }
+        evaluation += (this.boardSize - 1 - (this.fox.coordinate.y - minHoundsY)) * 10
+
+        // Check the amount of moves the fox can make this turn
+        // If 0, hounds win
+        let possibleMoves = this.fox.getPossibleMoves(this.boardSize);
+        let validMoves = possibleMoves.length;
+        for (let index in possibleMoves) {
+            if (this.getPieceForCoordinate(possibleMoves[index])) {
+                validMoves -= 1;
+            }
+        }
+        if (validMoves === 0) {
+            evaluation = -400;
+            return evaluation;
+        }
+        evaluation -= (4 - validMoves) * 10;
+
+        return evaluation;
+    }
+
     movePiece(piece, targetCoordinate) {
         if (piece.type === boardPieceTypes.TYPE_FOX) {
             piece.coordinate = targetCoordinate;
