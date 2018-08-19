@@ -27,6 +27,10 @@ class BoardPieceManager {
         }
     }
 
+    getDeepCopy() {
+        return JSON.parse(JSON.stringify(this));
+    }
+
     getHounds() {
         return this.hounds;
     }

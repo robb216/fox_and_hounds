@@ -17,6 +17,7 @@ class Board extends Component {
         this.state = {
             board: [],
             pieces: [],
+            scores: {},
             activePlayer: null,
             selectedPiece: null,
         };
@@ -103,7 +104,9 @@ class Board extends Component {
 
         let winningPlayer = this.checkWinConditions();
         if (winningPlayer) {
-            setMessage(`Player ${ winningPlayer } won!`)
+            let scores = this.state.scores;
+            scores[winningPlayer]? scores[winningPlayer] += 1 : scores[winningPlayer] = 1;
+            this.setState({ scores }, () => setMessage(`Player ${ winningPlayer } won ${ scores[winningPlayer] } times!`));
         } else {
             setMessage(`It's ${ activePlayer } turn!`);
 

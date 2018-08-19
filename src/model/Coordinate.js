@@ -22,7 +22,7 @@ class Coordinate {
     isValidCoordinate(boardSize = 999) {
         let result = false;
 
-        if (this.x > 0 && this.x < boardSize && this.y > 0 && this.y < boardSize) {
+        if (this.x >= 0 && this.x < boardSize && this.y >= 0 && this.y < boardSize) {
             result = true;
         }
 
