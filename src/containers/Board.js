@@ -60,26 +60,37 @@ class Board extends Component {
         this.setState({board: result});
     }
 
-    generateTurn(boardPieceManagerList = [this.boardPieceManager]) {
+    generateMovesForBoard(boardPieceManager = this.boardPieceManager.getClone()) {
         let { boardSize } = this.props;
+        let { activePlayer } = this.state;
         let result = [];
+        let fox = boardPieceManager.getFox();
+        let hounds = this.boardPieceManager.getHounds();
+        let possibleMoves = [];
 
-        // console.log(boardPieceManagerList);
-        // console.log(boardPieceManagerList[0] instanceof BoardPieceManager);
-        // console.log(Array.isArray(boardPieceManagerList));
-
-        for (let index in boardPieceManagerList) {
-            let possibleMoves = boardPieceManagerList[index].getFox().getPossibleMoves(boardSize);
+        let possibleMovesToBoards = (possibleMoves) => {
+            let result = []
             for (let moveIndex in possibleMoves) {
-                if (!this.boardPieceManager.getPieceForCoordinate(possibleMoves[moveIndex])) {
-                    let movedBoard = boardPieceManagerList[index].getClone()
-                    movedBoard.movePiece(movedBoard.getFox(), possibleMoves[moveIndex]);
+                if (!boardPieceManager.getPieceForCoordinate(possibleMoves[moveIndex])) {
+                    let movedBoard = boardPieceManager.getClone()
+                    movedBoard.movePiece(fox, possibleMoves[moveIndex]);
                     result.push(movedBoard);
                 }
             }
+            return result;
         }
 
-        console.log("result", result);
+        if ( activePlayer === gamePlayers.PLAYER_FOX ) {            
+            possibleMoves = fox.getPossibleMoves(boardSize);
+            result = result.concat(possibleMovesToBoards(possibleMoves));
+        } else {
+            for (let houndIndex in hounds) {
+                let hound = hounds[houndIndex];
+                possibleMoves = hound.getPossibleMoves(boardSize);
+                result = result.concat(possibleMovesToBoards(possibleMoves));
+            }
+        }
+
         return result;
     }
 
@@ -90,8 +101,6 @@ class Board extends Component {
 
         let currentScore = this.boardPieceManager.evaluateScore();
         console.log("Current score: ", currentScore);
-
-        this.generateTurn();
 
         for (let index in possibleMoves) {
             if (!this.boardPieceManager.getPieceForCoordinate(possibleMoves[index])) {
@@ -121,6 +130,12 @@ class Board extends Component {
 
         this.setState({ selectedPiece }, this.renderBoard);
         this.endTurn();
+    }
+
+    updateBoardPieceManager(newBoardPieceManager, shouldEndTurn = true) {
+        this.boardPieceManager = newBoardPieceManager;
+        this.renderBoard();
+        shouldEndTurn && this.endTurn();
     }
 
     endTurn() {

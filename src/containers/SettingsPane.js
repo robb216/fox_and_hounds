@@ -9,7 +9,6 @@ class MessagePane extends Component {
         this.onChange = this.onChange.bind(this);
     }
 
-    // Source: reactjs docs https://reactjs.org/docs/forms.html
     onChange(event) {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
