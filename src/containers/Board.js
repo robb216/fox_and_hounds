@@ -60,10 +60,25 @@ class Board extends Component {
         this.setState({board: result});
     }
 
-    generateFoxTurn(boardPieceManagerList = [this.boardPieceManager]) {
-        console.log(boardPieceManagerList);
-        console.log(boardPieceManagerList[0] instanceof BoardPieceManager);
-        console.log(Array.isArray(boardPieceManagerList));
+    generateTurn(boardPieceManagerList = [this.boardPieceManager]) {
+        let { boardSize } = this.props;
+        let result = [];
+
+        // console.log(boardPieceManagerList);
+        // console.log(boardPieceManagerList[0] instanceof BoardPieceManager);
+        // console.log(Array.isArray(boardPieceManagerList));
+
+        for (let index in boardPieceManagerList) {
+            let possibleMoves = boardPieceManagerList[index].getFox().getPossibleMoves(boardSize);
+            for (let moveIndex in possibleMoves) {
+                let movedBoard = boardPieceManagerList[index].getClone()
+                movedBoard.movePiece(movedBoard.getFox(), possibleMoves[moveIndex]);
+                result.push(movedBoard);
+            }
+        }
+
+        console.log("result", result);
+        return result;
     }
 
     checkWinConditions() {
@@ -74,7 +89,7 @@ class Board extends Component {
         let currentScore = this.boardPieceManager.evaluateScore();
         console.log("Current score: ", currentScore);
 
-        this.generateFoxTurn();
+        this.generateTurn();
 
         for (let index in possibleMoves) {
             if (!this.boardPieceManager.getPieceForCoordinate(possibleMoves[index])) {

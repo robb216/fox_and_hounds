@@ -63,8 +63,20 @@ class BoardPieceManager {
         }
     }
 
-    getDeepCopy() {
-        return JSON.parse(JSON.stringify(this));
+    getClone() {
+        let newBoardPieceManager = new BoardPieceManager(this.boardSize, 0, 0);
+        
+        let newHounds = [];
+        for (let index in this.hounds) {
+            let hound = this.hounds[index];
+            newHounds.push(new BoardPiece(hound.coordinate.x, hound.coordinate.y, boardPieceTypes.TYPE_HOUND));
+        }
+        let newFox = new BoardPiece(this.fox.coordinate.x, this.fox.coordinate.y, boardPieceTypes.TYPE_FOX);
+
+        newBoardPieceManager.hounds = newHounds;
+        newBoardPieceManager.fox = newFox;
+
+        return newBoardPieceManager;
     }
 
     getHounds() {

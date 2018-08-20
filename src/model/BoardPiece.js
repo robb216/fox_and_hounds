@@ -12,6 +12,7 @@ class BoardPiece {
     }
 
     getPossibleMoves(boardSize) {
+        if (!boardSize) { console.warn("BoardPiece getPossibleMoves boardSize not defined!") }
         let proximateSpaces = this.coordinate.getProximateSpaces(boardSize);
         let possibleMoves = [];
 
