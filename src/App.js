@@ -33,13 +33,11 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log(this.board.current.boardPieceManager);
-    this.aiManager = new AiManager(this.board.current);
+    this.aiManager = new AiManager(this.board.current, initialSettings);
   }
 
   onSettingsChange(newSettings) {
-    console.log(newSettings)
-    this.setState({ settings: newSettings });
+    this.setState({ settings: newSettings }, () => this.aiManager.updateSettings(this.state.settings));
   }
 
   render() {
@@ -50,7 +48,6 @@ class App extends Component {
       <div className="App">
         <p className="App-intro">
           Fox vs Hounds
-          { JSON.stringify(boardSettings) }
         </p>
         <MessagePane message={ message } />
         <Board { ...boardSettings } setMessage={ this.setMessage.bind(this) } ref={this.board} />
