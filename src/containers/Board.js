@@ -125,12 +125,12 @@ class Board extends Component {
 
     endTurn() {
         let { activePlayer } = this.state;
-        let { startingPlayer, setMessage } = this.props;
+        let { startAsFox, setMessage } = this.props;
 
         if (activePlayer) {
             activePlayer = (activePlayer === gamePlayers.PLAYER_FOX) ? gamePlayers.PLAYER_HOUNDS : gamePlayers.PLAYER_FOX;
         } else {
-            activePlayer = startingPlayer;
+            activePlayer = startAsFox ? gamePlayers.PLAYER_FOX : gamePlayers.PLAYER_HOUNDS;
         }
 
         let winningPlayer = this.checkWinConditions();
