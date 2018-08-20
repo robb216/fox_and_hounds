@@ -3,6 +3,7 @@ import './App.css';
 
 import Board, { players as gamePlayers } from './containers/Board.js'
 import MessagePane from './containers/MessagePane.js';
+import AiManager from './model/AiManager';
 
 const settings = {
   boardSize: 8,
@@ -17,10 +18,17 @@ class App extends Component {
     this.state = {
       message: "",
     };
+    this.board = React.createRef();
+    this.aiManager = null;
   }
 
   setMessage(newMessage) {
     this.setState({ message: newMessage });
+  }
+
+  componentDidMount() {
+    console.log(this.board.current.boardPieceManager);
+    this.aiManager = new AiManager(this.board.current);
   }
 
   render() {
@@ -32,7 +40,7 @@ class App extends Component {
           Fox vs Hounds
         </p>
         <MessagePane message={ message } />
-        <Board { ...settings } setMessage={ this.setMessage.bind(this) } />
+        <Board { ...settings } setMessage={ this.setMessage.bind(this) } ref={this.board} />
       </div>
     );
   }

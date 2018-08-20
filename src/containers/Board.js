@@ -71,9 +71,11 @@ class Board extends Component {
         for (let index in boardPieceManagerList) {
             let possibleMoves = boardPieceManagerList[index].getFox().getPossibleMoves(boardSize);
             for (let moveIndex in possibleMoves) {
-                let movedBoard = boardPieceManagerList[index].getClone()
-                movedBoard.movePiece(movedBoard.getFox(), possibleMoves[moveIndex]);
-                result.push(movedBoard);
+                if (!this.boardPieceManager.getPieceForCoordinate(possibleMoves[moveIndex])) {
+                    let movedBoard = boardPieceManagerList[index].getClone()
+                    movedBoard.movePiece(movedBoard.getFox(), possibleMoves[moveIndex]);
+                    result.push(movedBoard);
+                }
             }
         }
 
@@ -112,10 +114,13 @@ class Board extends Component {
     movePiece(piece, targetCoordinate) {
         let { selectedPiece } = this.state;
 
+        console.log(piece)
+
         this.boardPieceManager.movePiece(piece, targetCoordinate);
         selectedPiece = null;
 
         this.setState({ selectedPiece }, this.renderBoard);
+        this.endTurn();
     }
 
     endTurn() {
@@ -157,7 +162,6 @@ class Board extends Component {
                     setMessage(`${ selectedPiece.type } cannot move backwards`);    
                 } else {
                     this.movePiece(selectedPiece, coordinate);
-                    this.endTurn();
                 }            
             } else {
                 setMessage("Target too far away!");

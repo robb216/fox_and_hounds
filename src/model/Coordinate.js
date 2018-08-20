@@ -38,8 +38,6 @@ class Coordinate {
         possibleSpaces.push(this.add(new Coordinate(1, -1)));
         possibleSpaces.push(this.add(new Coordinate(-1, -1)));
 
-        console.log("coordinate", possibleSpaces)
-
         for (let index in possibleSpaces) {
             if (possibleSpaces[index].isValidCoordinate(boardSize)) {
                 result.push(possibleSpaces[index]);
