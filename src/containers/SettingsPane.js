@@ -68,6 +68,24 @@ class MessagePane extends Component {
                         onChange={ this.onChange }
                     />
                 </label></div>
+                <div>
+                    <input
+                        name="enableAi"
+                        type="button"
+                        value="Do single AI step"
+                        disabled={ this.state.enableAi }
+                        onClick={ () => this.props.doSingleAiStep() }
+                    />
+                </div>
+                <div><label>
+                    Dump AI tree info:
+                    <input
+                        name="shouldGenerateTree"
+                        type="checkbox"
+                        checked={ this.state.shouldGenerateTree }
+                        onChange={ this.onChange }
+                    />
+                </label></div>
                 <div><label>
                     AI turn delay:
                     <input

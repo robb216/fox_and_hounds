@@ -152,7 +152,7 @@ class Board extends Component {
  
     render() {
         return (
-            <table>
+            <table className="board">
                 <tbody>
                     { this.state.board }
                 </tbody>

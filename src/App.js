@@ -7,13 +7,14 @@ import SettingsPane from './containers/SettingsPane.js';
 import AiManager from './model/AiManager';
 
 const initialSettings = {
-  boardSize: 8,
-  houndsQuantity: 4,
+  boardSize: 6,
+  houndsQuantity: 3,
   foxStartPosition: 4,
   startAsFox: true,
   enableAi: false,
   aiDelay: 300,
-  aiTreeDepth: 4,
+  aiTreeDepth: 3,
+  shouldGenerateTree: false,
 }
 
 class App extends Component {
@@ -27,6 +28,7 @@ class App extends Component {
     this.aiManager = null;
 
     this.onSettingsChange = this.onSettingsChange.bind(this);
+    this.doSingleAiStep = this.doSingleAiStep.bind(this);
   }
 
   setMessage(newMessage) {
@@ -41,6 +43,10 @@ class App extends Component {
     this.setState({ settings: newSettings }, () => this.aiManager.updateSettings(this.state.settings));
   }
 
+  doSingleAiStep() {
+    this.aiManager.aiCycle();
+  }
+
   render() {
     let { message, settings } = this.state;
     let boardSettings = settings ? { ...settings } : initialSettings
@@ -52,7 +58,7 @@ class App extends Component {
         </p>
         <MessagePane message={ message } />
         <Board { ...boardSettings } setMessage={ this.setMessage.bind(this) } ref={this.board} />
-        <SettingsPane onSettingsChange={ this.onSettingsChange } initialSettings={ initialSettings } />
+        <SettingsPane onSettingsChange={ this.onSettingsChange } initialSettings={ initialSettings } doSingleAiStep={ this.doSingleAiStep } />
       </div>
     );
   }

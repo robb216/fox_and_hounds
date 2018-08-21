@@ -26,3 +26,15 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.board {
+  /* margin: 20px 50%;  */
+  /* border: 1px solid #333; */
+}
+
+span.coord {
+  font-size: 8px;
+  color: #777;
+  margin: 2px;
+  display: none;
+}

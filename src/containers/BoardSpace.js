@@ -20,13 +20,15 @@ class BoardSpace extends Component {
     }
 
     render() {
+        let { coordinate } = this.props;
         return (
             <td onClick={ () => this.onClick() }>
                 { this.props.type }
+                <span className="coord">{coordinate.x},{coordinate.y}</span>
             </td>
         );
     }
-}
+} 
 
 export default BoardSpace;
 export const types = boardSpaceTypes;

@@ -21,18 +21,18 @@ class BoardPieceManager {
 
         // Check the distance between fox and the highest dog(s)
         // If the fox's Y has already passed the hounds, fox win
-        let minHoundsY = this.boardSize - 1;
-        for (let index in this.hounds) {
-            const houndY = this.hounds[index].coordinate.y;
-            if (houndY < minHoundsY) {
-                minHoundsY = houndY;
-            }
-        }
-        if (this.fox.y <= minHoundsY) {
+        // let minHoundsY = this.boardSize - 1;
+        // for (let index in this.hounds) {
+        //     const houndY = this.hounds[index].coordinate.y;
+        //     if (houndY < minHoundsY) {
+        //         minHoundsY = houndY;
+        //     }
+        // }
+        if (this.fox.coordinate.y === 0) {
             evaluation = 400;
             return evaluation;
         }
-        evaluation += (this.boardSize - 1 - (this.fox.coordinate.y - minHoundsY)) * 10
+        evaluation += (this.boardSize - 1 - (this.fox.coordinate.y)) * 10
 
         // Check the amount of moves the fox can make this turn
         // If 0, hounds win
