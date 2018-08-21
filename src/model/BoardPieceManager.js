@@ -1,4 +1,6 @@
 import BoardPiece, { types as boardPieceTypes } from './BoardPiece.js';
+import { players as gamePlayers } from '../containers/Board.js';
+import Coordinate from './Coordinate.js';
 
 class BoardPieceManager {
     constructor(boardSize = 8, houndsQuantity = 4, foxStartPosition = 4) {
@@ -50,14 +52,47 @@ class BoardPieceManager {
         return evaluation;
     }
 
+    getPossibleMoves(isCurrentPlayerFox = true) {
+        let boardPieceManager = this.getClone();
+        let activePlayer = isCurrentPlayerFox ? gamePlayers.PLAYER_FOX : gamePlayers.PLAYER_HOUNDS;
+        let result = [];
+        let fox = boardPieceManager.getFox();
+        let hounds = boardPieceManager.getHounds();
+        let possibleMoves = [];
+
+        let possibleMovesToBoards = (possibleMoves, boardPiece) => {
+            let result = []
+            for (let moveIndex in possibleMoves) {
+                if (!boardPieceManager.getPieceForCoordinate(possibleMoves[moveIndex])) {
+                    let movedBoard = boardPieceManager.getClone();
+                    movedBoard.movePiece(boardPiece, possibleMoves[moveIndex]);
+                    result.push(movedBoard);
+                }
+            }
+            return result;
+        }
+
+        if ( activePlayer === gamePlayers.PLAYER_FOX ) {
+            possibleMoves = fox.getPossibleMoves(this.boardSize);
+            result = result.concat(possibleMovesToBoards(possibleMoves, fox));
+        } else {
+            for (let houndIndex in hounds) {
+                let hound = hounds[houndIndex];
+                possibleMoves = hound.getPossibleMoves(this.boardSize);
+                result = result.concat(possibleMovesToBoards(possibleMoves, hound));
+            }
+        }
+
+        return result;
+    }
+
     movePiece(piece, targetCoordinate) {
         if (piece.type === boardPieceTypes.TYPE_FOX) {
-            piece.coordinate = targetCoordinate;
-            this.fox = piece;
+            this.fox.coordinate = new Coordinate(targetCoordinate.x, targetCoordinate.y);
         } else {
             for (let pieceIndex in this.hounds) {
-                if (this.hounds[pieceIndex].coordinate === piece.coordinate) {
-                    this.hounds[pieceIndex].coordinate = targetCoordinate;
+                if (this.hounds[pieceIndex].coordinate.equals(piece.coordinate)) {
+                    this.hounds[pieceIndex].coordinate = new Coordinate(targetCoordinate.x, targetCoordinate.y);
                 }
             }
         }

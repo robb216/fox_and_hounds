@@ -77,6 +77,15 @@ class MessagePane extends Component {
                         onChange={ this.onChange }
                     />
                 </label></div>
+                <div><label>
+                    AI tree depth:
+                    <input
+                        name="aiTreeDepth"
+                        type="number"
+                        value={ this.state.aiTreeDepth }
+                        onChange={ this.onChange }
+                    />
+                </label></div>
             </form>
         );
     }

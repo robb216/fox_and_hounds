@@ -13,6 +13,7 @@ const initialSettings = {
   startAsFox: true,
   enableAi: false,
   aiDelay: 100,
+  aiTreeDepth: 4,
 }
 
 class App extends Component {
