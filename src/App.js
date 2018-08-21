@@ -12,7 +12,7 @@ const initialSettings = {
   foxStartPosition: 4,
   startAsFox: true,
   enableAi: false,
-  aiDelay: 100,
+  aiDelay: 300,
   aiTreeDepth: 4,
 }
 

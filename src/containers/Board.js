@@ -60,47 +60,13 @@ class Board extends Component {
         this.setState({board: result});
     }
 
-    generateMovesForBoard(boardPieceManager = this.boardPieceManager.getClone()) {
-        let { boardSize } = this.props;
-        let { activePlayer } = this.state;
-        let result = [];
-        let fox = boardPieceManager.getFox();
-        let hounds = this.boardPieceManager.getHounds();
-        let possibleMoves = [];
-
-        let possibleMovesToBoards = (possibleMoves) => {
-            let result = []
-            for (let moveIndex in possibleMoves) {
-                if (!boardPieceManager.getPieceForCoordinate(possibleMoves[moveIndex])) {
-                    let movedBoard = boardPieceManager.getClone()
-                    movedBoard.movePiece(fox, possibleMoves[moveIndex]);
-                    result.push(movedBoard);
-                }
-            }
-            return result;
-        }
-
-        if ( activePlayer === gamePlayers.PLAYER_FOX ) {            
-            possibleMoves = fox.getPossibleMoves(boardSize);
-            result = result.concat(possibleMovesToBoards(possibleMoves));
-        } else {
-            for (let houndIndex in hounds) {
-                let hound = hounds[houndIndex];
-                possibleMoves = hound.getPossibleMoves(boardSize);
-                result = result.concat(possibleMovesToBoards(possibleMoves));
-            }
-        }
-
-        return result;
-    }
-
     checkWinConditions() {
         let { boardSize } = this.props;
         let possibleMoves = this.boardPieceManager.getFox().getPossibleMoves(boardSize);
         let validMoves = 0;
 
-        let currentScore = this.boardPieceManager.evaluateScore();
-        console.log("Current score: ", currentScore);
+        // let currentScore = this.boardPieceManager.evaluateScore();
+        // console.log("Current score: ", currentScore);
 
         for (let index in possibleMoves) {
             if (!this.boardPieceManager.getPieceForCoordinate(possibleMoves[index])) {

@@ -33,15 +33,35 @@ class AiManager {
     }
 
     aiCycle() {
-        let moves = this.board.generateMovesForBoard();
+        let isTargetScoreMax = this.board.state.activePlayer === gamePlayers.PLAYER_FOX ? true : false;
+        let moves = this.board.boardPieceManager.getPossibleMoves(isTargetScoreMax);
         let depth = this.settings.aiTreeDepth;
 
         if (moves.length > 1) {
-            let isTargetScoreMax = this.board.state.activePlayer === gamePlayers.PLAYER_FOX ? true : false;
             // do tree stuff
-            this.generateTurnFromTree(moves, depth, isTargetScoreMax);
-            console.log("tree stuff");
-            return;
+            let bestScore = null;
+            let bestMove = null;
+            for (let index in moves) {
+                let move = moves[index];
+                let newScore = null;
+                if (depth === 0) {
+                    newScore = move.evaluateScore();
+                    console.log("score: ", newScore)
+                } else {
+                    let newMoves = move.getPossibleMoves(isTargetScoreMax);
+                    newScore = this.generateScoreFromTree(newMoves, depth-1, !isTargetScoreMax);
+                }
+                if (this.compareScores(bestScore, newScore, isTargetScoreMax)) {
+                    bestScore = newScore;
+                    bestMove = move;
+                }
+            }
+            if (bestMove) {
+                this.board.updateBoardPieceManager(moves[0]);
+            } else {
+                console.error("AiManager aiCycle: unexpected bestMove undefined");
+                return;
+            }
         } else if (moves.length === 1) {
             // Only one move to choose from, no need to generate a tree
             this.board.updateBoardPieceManager(moves[0])
@@ -52,23 +72,23 @@ class AiManager {
         this.settings.enableAi && setTimeout(this.aiCycle, this.settings.aiDelay)
     }
 
-    generateTurnFromTree(moves, depth, isTargetScoreMax = true) {
+    generateScoreFromTree(moves, depth, isTargetScoreMax = true) {
         let bestScore = 0;
         for (let index in moves) {
             let move = moves[index];
             let newScore = null;
             if (depth === 0) {
                 newScore = move.evaluateScore();
-                console.log("score: ", newScore)
+                // console.log("score: ", newScore)
             } else {
                 let newMoves = move.getPossibleMoves(isTargetScoreMax);
-                newScore = this.generateTurnFromTree(newMoves, depth-1, !isTargetScoreMax);
+                newScore = this.generateScoreFromTree(newMoves, depth-1, !isTargetScoreMax);
             }
             if (this.compareScores(bestScore, newScore, isTargetScoreMax)) {
                 bestScore = newScore;
             }
         }
-        console.log("depth: " + depth, "bestscore: ", bestScore, "isTargetScoreMax: ", isTargetScoreMax, moves);
+        // console.log("depth: " + depth, "bestscore: ", bestScore, "isTargetScoreMax: ", isTargetScoreMax, moves);
         return bestScore;
     }
 }
